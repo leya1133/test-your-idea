@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSI - Test Your Idea | Çok Ajanlı Fikir Test Etme Sistemi</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- DOMPurify for XSS Protection -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+    <!-- Chart.js for Radar Score Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2pdf.js for 1-Click PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="app-background">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="navbar">
+            <div class="logo">
+                <img src="logo.png" alt="TSI Logo" class="brand-logo-img">
+                <div class="logo-text">
+                    <span class="brand-title">TSI</span>
+                    <span class="brand-sub">Test Your Idea Enterprise</span>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button id="open-modal-btn" class="btn btn-primary glow-effect">
+                    <i class="fa-solid fa-rocket"></i> Fikir Test Et
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Hero Section / Dashboard -->
+        <main class="main-content">
+            
+            <!-- Welcome / Empty State -->
+            <section id="welcome-section" class="welcome-card glass-panel">
+                <div class="welcome-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Yapay Zekâ Otonom Ajan Ekibi</div>
+                <h1>Fikrinizi 5 Otonom Ajan İle <span class="gradient-text">Canlı Test Edin</span></h1>
+                <p>Pazar analizi, müşteri talebi, teknik fizibilite ve maliyet araştırmasını dakikalar içinde yapın. Hakem Ajan'dan objektif Go/No-Go raporu alın.</p>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <i class="fa-solid fa-chart-line color-purple"></i>
+                        <h4>Pazar & Rakip Taraması</h4>
+                        <p>Canlı web aramalarıyla rakipleri ve pazar açıklarını tespit eder.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fa-solid fa-comments color-light-purple"></i>
+                        <h4>Talep & Duygu Analizi</h4>
+                        <p>Kullanıcı acı noktalarını ve talebin aciliyetini ölçer.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fa-solid fa-code color-purple"></i>
+                        <h4>Teknik Fizibilite</h4>
+                        <p>GitHub projelerini tarayıp MVP yapım süresini hesaplar.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fa-solid fa-calculator color-light-purple"></i>
+                        <h4>Maliyet & Risk Simülasyonu</h4>
+                        <p>Aylık API/bulut giderini ve KVKK/GDPR risklerini simüle eder.</p>
+                    </div>
+                </div>
+                <button id="hero-start-btn" class="btn btn-primary btn-lg margin-top-lg">
+                    <i class="fa-solid fa-play"></i> Hemen Bir Fikir Test Et
+                </button>
+            </section>
+
+            <!-- Active Test / Results Section (Hidden by default) -->
+            <section id="test-runner-section" class="test-runner-container hidden">
+                
+                <!-- Status Header -->
+                <div class="status-header glass-panel">
+                    <div class="idea-info">
+                        <span class="tag tag-purple">Aktif Test</span>
+                        <h2 id="display-idea-title">Fikir Başlığı</h2>
+                        <p id="display-idea-target"><i class="fa-solid fa-bullseye"></i> Hedef Kitle: ...</p>
+                    </div>
+                    <div class="status-indicator">
+                        <div id="status-spinner" class="spinner"></div>
+                        <span id="status-text" class="status-label">Ajanlar Çalıştırılıyor...</span>
+                    </div>
+                </div>
+
+                <!-- Pipeline & Agent Outputs Split View -->
+                <div class="dashboard-grid">
+                    
+                    <!-- Left Column: Ajan Ajan Ne Dedi? (Agent Accordion Outputs) -->
+                    <div class="agent-outputs-column">
+                        <h3 class="section-title"><i class="fa-solid fa-users-gear"></i> Ajan Ajan Ne Dedi? (Canlı Raporlar)</h3>
+                        
+                        <div class="agent-cards-list">
+                            <!-- Market Agent Card -->
+                            <div class="agent-card glass-panel" id="agent-card-0">
+                                <div class="agent-card-header">
+                                    <div class="agent-meta">
+                                        <div class="agent-avatar bg-purple"><i class="fa-solid fa-chart-pie"></i></div>
+                                        <div>
+                                            <h4>1. Market & Competitor Agent</h4>
+                                            <span class="agent-role">Pazar Büyüklüğü & Rakip Taraması</span>
+                                        </div>
+                                    </div>
+                                    <span class="agent-status-badge badge-pending" id="status-badge-0">Bekliyor</span>
+                                </div>
+                                <div class="agent-card-body hidden" id="agent-body-0">
+                                    <div class="markdown-body" id="agent-text-0">Henüz rapor gelmedi...</div>
+                                </div>
+                            </div>
+
+                            <!-- Demand Agent Card -->
+                            <div class="agent-card glass-panel" id="agent-card-1">
+                                <div class="agent-card-header">
+                                    <div class="agent-meta">
+                                        <div class="agent-avatar bg-violet"><i class="fa-solid fa-comments"></i></div>
+                                        <div>
+                                            <h4>2. Demand & Sentiment Agent</h4>
+                                            <span class="agent-role">Kullanıcı Acı Noktaları & Duygu Analizi</span>
+                                        </div>
+                                    </div>
+                                    <span class="agent-status-badge badge-pending" id="status-badge-1">Bekliyor</span>
+                                </div>
+                                <div class="agent-card-body hidden" id="agent-body-1">
+                                    <div class="markdown-body" id="agent-text-1">Henüz rapor gelmedi...</div>
+                                </div>
+                            </div>
+
+                            <!-- Tech Feasibility Card -->
+                            <div class="agent-card glass-panel" id="agent-card-2">
+                                <div class="agent-card-header">
+                                    <div class="agent-meta">
+                                        <div class="agent-avatar bg-purple"><i class="fa-solid fa-code"></i></div>
+                                        <div>
+                                            <h4>3. Technical Feasibility Agent</h4>
+                                            <span class="agent-role">GitHub Taraması & MVP Süresi</span>
+                                        </div>
+                                    </div>
+                                    <span class="agent-status-badge badge-pending" id="status-badge-2">Bekliyor</span>
+                                </div>
+                                <div class="agent-card-body hidden" id="agent-body-2">
+                                    <div class="markdown-body" id="agent-text-2">Henüz rapor gelmedi...</div>
+                                </div>
+                            </div>
+
+                            <!-- Financial & Legal Card -->
+                            <div class="agent-card glass-panel" id="agent-card-3">
+                                <div class="agent-card-header">
+                                    <div class="agent-meta">
+                                        <div class="agent-avatar bg-violet"><i class="fa-solid fa-calculator"></i></div>
+                                        <div>
+                                            <h4>4. Financial & Legal Agent</h4>
+                                            <span class="agent-role">Aylık Maliyet Simülasyonu & GDPR/KVKK</span>
+                                        </div>
+                                    </div>
+                                    <span class="agent-status-badge badge-pending" id="status-badge-3">Bekliyor</span>
+                                </div>
+                                <div class="agent-card-body hidden" id="agent-body-3">
+                                    <div class="markdown-body" id="agent-text-3">Henüz rapor gelmedi...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Judge Agent Final Verdict & Interactive Tools -->
+                    <div class="judge-verdict-column">
+                        <h3 class="section-title"><i class="fa-solid fa-gavel"></i> Hakem (Judge) Ajanı Nihai Kararı</h3>
+                        
+                        <div id="judge-verdict-card" class="judge-card glass-panel">
+                            <div id="verdict-placeholder" class="verdict-loading-state">
+                                <div class="pulse-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                                <h4>Hakem Sentez Raporu Bekleniyor</h4>
+                                <p>Araştırma ajanları sonuçlarını Hakem Ajan'a aktardıktan sonra final yatırım/uygulanabilirlik kararı burada görünecektir.</p>
+                            </div>
+
+                            <div id="verdict-content" class="verdict-results hidden">
+                                <div class="verdict-banner" id="verdict-banner-box">
+                                    <span class="verdict-subtitle">NİHAİ DEĞERLENDİRME</span>
+                                    <h2 id="verdict-title-text">GO / NO-GO</h2>
+                                </div>
+
+                                <!-- Action Buttons: Copy, PDF Export, Markdown Download -->
+                                <div class="actions-bar margin-top-md">
+                                    <button id="download-pdf-btn" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> PDF İndir</button>
+                                    <button id="download-md-btn" class="btn btn-secondary"><i class="fa-solid fa-file-code"></i> Markdown İndir</button>
+                                    <button id="copy-report-btn" class="btn btn-secondary"><i class="fa-solid fa-copy"></i> Kopyala</button>
+                                </div>
+
+                                <!-- Radar Chart Canvas Container -->
+                                <div class="chart-container margin-top-md">
+                                    <canvas id="scoreRadarChart"></canvas>
+                                </div>
+
+                                <!-- Markdown Verdict Content -->
+                                <div class="markdown-body margin-top-md" id="judge-report-markdown"></div>
+
+                                <!-- Interactive Q&A Chat with Judge Agent ("Hakeme Soru Sor") -->
+                                <div class="judge-qa-box glass-panel margin-top-lg">
+                                    <h4><i class="fa-solid fa-comments-dollar color-purple"></i> Hakeme Soru Sor (VC Q&A)</h4>
+                                    <p>Hakem Ajanı'na bu kararla ilgili aklınıza takılan spesifik soruları sorabilirsiniz:</p>
+                                    
+                                    <div class="qa-messages-list" id="qa-messages-list">
+                                        <!-- Dynamic Q&A messages will appear here -->
+                                    </div>
+
+                                    <div class="qa-input-row margin-top-sm">
+                                        <input type="text" id="qa-question-input" placeholder="Örn: MVP süresini 4 haftadan 2 haftaya nasıl indiririm?">
+                                        <button id="send-question-btn" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- POP-UP MODAL: Fikir Girişi, Rehberlik ve Gizlilik Garantisi -->
+    <div id="idea-modal" class="modal-overlay hidden">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <div class="modal-title-box">
+                    <img src="logo.png" alt="TSI" class="modal-logo-img">
+                    <h3>Yeni Fikir Test Et (TSI)</h3>
+                </div>
+                <button id="close-modal-btn" class="close-btn">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Guidance / Information Box -->
+                <div class="guidance-box">
+                    <div class="guidance-title"><i class="fa-solid fa-circle-info"></i> Fikrinizi Nasıl Yazmalısınız? (Rehber)</div>
+                    <p>Ajanların en doğru canlı internet verisini ve rakipleri bulabilmesi için fikrinizi net ve detaylı tanımlayın.</p>
+                    <div class="examples-grid">
+                        <div class="example-item example-bad">
+                            <span class="example-tag tag-red">❌ Eksik/Zayıf Giriş</span>
+                            <code>"E-ticaret iade uygulaması."</code>
+                        </div>
+                        <div class="example-item example-good">
+                            <span class="example-tag tag-green">✅ Etkili Giriş</span>
+                            <code>"Shopify kullanan e-ticaret satıcıları için otomatik müşteri iadelerini yöneten ve dolandırıcılık tespiti yapan otonom WhatsApp botu."</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form id="idea-form" class="modal-form">
+                    <div class="form-group">
+                        <label for="input-title">Fikir Başlığı <span class="required">*</span></label>
+                        <input type="text" id="input-title" placeholder="Örn: AI E-Ticaret İade Asistanı" required max="200">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-description">Fikir Açıklaması & Çözüm <span class="required">*</span></label>
+                        <textarea id="input-description" rows="4" placeholder="Fikriniz ne iş yapıyor? Hangi sorunu çözüyor? Ana özellikleri nelerdir?" required max="2000"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-target">Hedef Kitle <span class="required">*</span></label>
+                        <input type="text" id="input-target" placeholder="Örn: Shopify ve Trendyol mağazası olan KOBİ satıcıları" required max="300">
+                    </div>
+
+                    <!-- Privacy & Zero Data Retention Security Badge -->
+                    <div class="privacy-badge">
+                        <i class="fa-solid fa-shield-halved color-emerald"></i>
+                        <span><strong>Zero Data Retention Garantisi:</strong> Fikirleriniz veritabanında saklanmaz ve model eğitiminde kullanılmaz.</span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="cancel-modal-btn" class="btn btn-secondary">İptal</button>
+                        <button type="submit" id="submit-form-btn" class="btn btn-primary glow-effect">
+                            <i class="fa-solid fa-paper-plane"></i> Ajanları Çalıştır ve Test Et
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
